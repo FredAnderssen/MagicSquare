@@ -1,0 +1,2 @@
+# MagicSquare
+my school project 
