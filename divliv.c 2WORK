@@ -1,0 +1,178 @@
+#include "DivLib.h"
+#include "myIOLib.h"
+#include "simpio.h"
+
+void printTxtFile(char* filename)
+{
+  FILE *f;
+      char c;
+      f=fopen(filename,"rt");
+
+      while((c=fgetc(f))!=EOF){
+          printf("%c",c);
+      }
+      fclose(f);
+}
+
+void prntMenu(void)
+{
+  char choice = 0;
+  do {
+  printf("\n\nChoose an option:\n");
+  printf("1 - Write in an Matrix manually\n");
+  printf("2 - SAve current MAtrix to textfile\n");
+  printf("3 - Get an  MAtrix from an textfile\n");
+  printf("4 - Play FYLLA I SPEL \n");
+  printf("0 - Exit program\n\n");
+  choice = getInteger("Your choice: ");
+  Menu(choice);
+
+} while (choice != 0);
+
+}
+
+void Menu(int choice)
+{
+  switch (choice) {
+    case 1:
+      getMatrix();
+      //test MS
+      //TODO pekare matrix så det blir i två func
+
+      break;
+    case 2:
+
+
+    case 3:
+      readFromtxtFile();
+      break;
+
+    case 4:
+
+    default:
+      break;
+
+  }
+}
+
+
+void getMatrix(void)
+{
+  int matrix[SIZE][SIZE];
+
+  //temp
+  printf("\n Enter 16's numbers for your matrix: ");
+
+  for(int row = 0; row < SIZE; row++)
+  {
+    for(int col = 0; col < SIZE; col++)
+      scanf("%x", &matrix[row][col]);
+  }
+
+  //TODO gör egen function
+  if(askUserSaveMS())
+    saveMStxtFile(matrix);
+
+  //TODO gör egen function
+  if(rowColTest(matrix) && diaTest(matrix))
+    prntMatrix(matrix); //TODO få bort dennna här ifrån
+  getchar();
+
+}
+
+void prntMatrix(int matrix[][SIZE])
+{
+  for(int row = 0; row < SIZE; row++)
+  {
+    printf("\n");
+    for(int col = 0; col < SIZE; col++)
+      printf("\t %x", matrix[row][col]);
+  }
+
+
+
+}
+
+bool diaTest(int matrix[][SIZE])
+{
+  int LRsum = 0;
+  int sumRL = 0;
+  bool result = FALSE;
+
+    for(int LRcol = 0, colRL = 3; LRcol < SIZE, colRL >= 0; LRcol++, colRL--)
+    {
+        LRsum += matrix[LRcol][LRcol];
+        sumRL += matrix[LRcol][colRL];
+    }
+
+  printf("%x %x", LRsum, sumRL); //TODO testWORKS
+  if ((LRsum == 30) && (sumRL == 30))
+    result = TRUE;
+
+  return result;
+}
+
+bool rowColTest(int matrix[][SIZE]) //TODO does it work?
+{
+  int sumRow = 0;
+  int sumCol = 0;
+  int sum = 30;
+  int result = FALSE;
+
+  for(int row = 0;row < SIZE; row++)
+  {
+    sumRow = 0;
+    sumCol = 0;
+    for(int col = 0; col < SIZE; col++)
+    {
+      sumRow += matrix[row][col];
+      sumCol += matrix[col][row];
+
+      if((sumRow == sum) && (sumCol == sum))
+        result = TRUE;
+    }
+
+    if((sumRow != sum) || (sumCol != sum))
+    {
+      result = FALSE;
+      break;
+    }
+  }
+  printf("%d %d", sumRow, sumCol); //test
+  printf("\n %d", result);          //test
+  return result;
+}
+
+void saveMStxtFile(int matrix[][SIZE]) //TODO felhantering
+{
+  FILE *inFile = fopen("SAVED_MagicSquare.txt", "w");
+
+  for(int row = 0; row < SIZE; row++)
+  {
+    for(int col = 0; col < SIZE; col++)
+    {
+      fprintf(inFile, "%d ", matrix[row][col]);
+    }
+  }
+
+  fclose(inFile);
+}
+
+bool askUserSaveMS(void)
+{
+  int result = FALSE;   //måste ha ==1 där annars går alla siffror bra..
+  if((getInteger("\nSave Magic-Square into a textfile? \nType 1: \n ")) == 1)
+    result = TRUE;
+  return result;
+
+}
+
+void readFromtxtFile(void)
+{
+  string str;
+  FILE *inFile = fopen("hexkvadrater.txt", "r");
+  str = ReadLine(inFile);
+  printf("HELLLO THERE %s", str);
+
+
+}
