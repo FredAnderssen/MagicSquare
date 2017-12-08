@@ -1,0 +1,276 @@
+#include "DivLib.h"
+#include "myIOLib.h"
+#include "simpio.h"
+#include <string.h>
+#include "random.h"
+
+void printTxtFile(char* filename)
+{
+  FILE *f;
+      char c;
+      f=fopen(filename,"rt");
+
+      while((c=fgetc(f))!=EOF){
+          printf("%c",c);
+      }
+      fclose(f);
+}
+
+void prntMenu(void)
+{
+  char choice = 0;
+  do {
+  printf("\n\nChoose an option:\n");
+  printf("1 - Write in an Matrix manually\n");
+  printf("2 - Get an  Matrix from an textfile\n");
+  printf("3 - Play FYLLA I SPEL \n");
+  printf("0 - Exit program\n\n");
+  choice = getInteger("Your choice: ");
+  Menu(choice);
+
+ } while (choice != 0);
+
+}
+
+void Menu(int choice)
+{
+  switch (choice) {
+    case 1:
+      getMatrix();
+      break;
+
+    case 2:
+      readFromtxtFile();
+      break;
+
+    case 3:
+
+      littleGame();
+      break;
+
+    default:
+      break;
+  }
+}
+
+void getMatrix(void)
+{
+  int matrix[SIZE][SIZE];
+
+  //temp
+  printf("\n Enter 16's numbers for your matrix: ");
+
+  for(int row = 0; row < SIZE; row++)
+  {
+    for(int col = 0; col < SIZE; col++)
+      scanf("%x", &matrix[row][col]);
+  }
+
+  //TODO gör egen function
+  if(askUser("Save Magic Square into a textfile?\nType 1...\n"))
+    saveMStxtFile(matrix);
+
+  //TODO gör egen function
+  //if(rowColTest(matrix) && diaTest(matrix) && doublettTest(matrix))
+  if(allTests(matrix))
+    prntMatrix(matrix); //TODO få bort dennna här ifrån
+  getchar();
+
+}
+
+void prntMatrix(int matrix[][SIZE])
+{
+  for(int row = 0; row < SIZE; row++)
+  {
+    printf("\n");
+    for(int col = 0; col < SIZE; col++)
+      printf("\t %x", matrix[row][col]);
+  }
+
+
+
+}
+
+bool diaTest(int matrix[][SIZE]) //WORKS
+{
+  int LRsum = 0;
+  int sumRL = 0;
+  bool result = FALSE;
+
+    for(int LRcol = 0, colRL = 3; LRcol < SIZE, colRL >= 0; LRcol++, colRL--)
+    {
+        LRsum += matrix[LRcol][LRcol];
+        sumRL += matrix[LRcol][colRL];
+    }
+
+    //printf("\n\n%x %x", LRsum, sumRL); //TODO testWORKS
+
+  if ((LRsum == 30) && (sumRL == 30))
+    result = TRUE;
+
+  return result;
+}
+
+bool rowColTest(int matrix[][SIZE]) //WORKS
+{
+  int sumRow = 0;
+  int sumCol = 0;
+  int sum = 30;
+  int result = FALSE;
+
+  for(int row = 0;row < SIZE; row++)
+  {
+    sumRow = 0;
+    sumCol = 0;
+    for(int col = 0; col < SIZE; col++)
+    {
+      sumRow += matrix[row][col];
+      sumCol += matrix[col][row];
+
+      if((sumRow == sum) && (sumCol == sum))
+        result = TRUE;
+    }
+
+    if((sumRow != sum) || (sumCol != sum))
+    {
+      result = FALSE;
+      break;
+    }
+  }
+  //printf("%d %d", sumRow, sumCol); //test
+  //printf("\n %d", result);          //test
+  return result;
+}
+
+bool doublettTest(int matrix[][SIZE]) //WORKS
+{
+  int totalSumInMS = 0;
+  bool arr[16];
+  bool result = TRUE;
+
+  for(int i = 0; i < 16; i++)
+  {
+    arr[i] = 0;
+  }
+
+  for(int row = 0; row < SIZE; row++)
+  {
+    for(int col = 0; col < SIZE; col++)
+    {
+      if(arr[matrix[row][col]] == 0)
+        arr[matrix[row][col]] = 1;
+      else
+      {
+        result = FALSE;
+        break;
+      }
+    }
+  }
+  return result;
+}
+
+void saveMStxtFile(int matrix[][SIZE]) //TODO felhantering
+{
+  FILE *inFile = fopen("SAVED_MagicSquare.txt", "w");
+
+  for(int row = 0; row < SIZE; row++)
+  {
+    for(int col = 0; col < SIZE; col++)
+    {
+      fprintf(inFile, "%x ", matrix[row][col]);
+    }
+  }
+
+  fclose(inFile);
+}
+
+void readFromtxtFile(void)
+{
+  //string str;
+  FILE *inFile = fopen("hexkvadrater.txt", "r");
+  //str = ReadLine(inFile);
+
+  int array[SIZE][SIZE];
+
+  for (int arr = 0; arr < SIZE; arr++)
+  {
+    for (int idx = 0; idx < SIZE; idx++)
+    {
+      fscanf(inFile, "%x", &array[arr][idx]);
+    }
+  }
+
+  if(askUser("Do you want to see the Magic Sqaure?\nType 1.."))
+    prntMatrix(array);
+
+  if(allTests(array))
+    printf("\nThis is a correct MagicSquare \n");
+  else
+    printf("\n This is a non-correct MAgicSquare \n");
+
+
+}
+
+bool askUser(char* str)
+{
+  int result = FALSE;   //måste ha ==1 där annars går alla siffror bra..
+  if((getInteger(str)) == 1)
+    result = TRUE;
+  return result;
+}
+
+void littleGame(void) //TODO generalisera mer inuti
+{
+  int array[SIZE][SIZE];
+  int duplicateArr[SIZE][SIZE];
+  int roof;
+  int k, m;
+
+  FILE *inFile = fopen("hexkvadrater.txt", "r");
+
+  for (int arr = 0; arr < SIZE; arr++)
+  {
+    for (int idx = 0; idx < SIZE; idx++)
+    {
+      fscanf(inFile, "%x", &array[arr][idx]);
+    }
+  }
+
+  roof = RandomInteger(0, 7);
+  memcpy(duplicateArr, array, sizeof(array));
+  for(int i = 0; i <= roof; i++)
+  {
+    k = RandomInteger(0,3);
+    m = RandomInteger(0,3);
+
+    duplicateArr[k][m] = 0;
+  }
+
+  prntMatrix(duplicateArr);
+  //printf("\n\n Facit:  ");//for test purp
+
+
+  //TODO gör getMAtrix mer generell och få in den func här
+  printf("\n Enter 16's numbers for your matrix: ");
+  for(int row = 0; row < SIZE; row++)
+  {
+    for(int col = 0; col < SIZE; col++)
+      scanf("%x", &duplicateArr[row][col]);
+  }
+
+  if(allTests(duplicateArr))
+    printf(" \nCORRECT Magic Square");
+  else
+    printf(" \nINCORRECT Magic Square");
+  getchar();
+  //*******************************************************
+
+}
+
+bool allTests(int matrix[][SIZE])
+{
+  if(diaTest(matrix) && rowColTest(matrix) && doublettTest(matrix))
+    return TRUE;
+  else
+    return FALSE;
+}
