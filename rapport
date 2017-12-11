@@ -1,0 +1,183 @@
+PROJEkT RaPpORT  INtroduktion till Programmering
+Utförd av:	Fredric Lundberg	Dmp1/Dis1
+Datum:	2017-11-27
+
+
+
+
+Några saker att tänka på:
+
+Börja skriva rapporten i god tid, dvs vänta inte till sista veckan, i tanke att vara klar med programmeringsarbetet. Rapporten är en viktig del av arbetet, för att tala om och dokumentera vad som har gjorts.
+Ta bort alla röda instruktionstexter från rapporten.
+Att föra loggbok kan vara ett bra sätt att kronologiskt dokumentera sitt arbete. En öppen loggbok kan ju också vara ett sätt att kommunicera framskridandet i arbetet.
+Att dela kod via ett versionhanteringssystem (såsom t.ex. Git eller Team Foundation Service) kan vara ett bra sätt att spara sin kod.
+Att tidigt lägga tid på planering av arbetet lönar sig och spar tid både när det gäller programmeringsarbetet och skrivning av rapporten.
+
+
+
+Innehåll
+
+
+Introduktion	4
+Bakgrund	4
+Målsättningar	4
+Analys av projektuppgiften	5
+Genomförande	7
+Resultat	11
+Diskussion	14
+Referenser	16
+Ordförklaring	18
+
+
+
+Introduktion
+Bakgrund
+Vad handlar projektet om allmänt och varför är det intressant.  
+Projektet har gått ut på att lära sig hantera en Magic Square på ett antal sätt. Även att bekanta sig mer i bredare projekt rörande C programmering. Det har varit intressant då man fått ett större projekt på sina axlar. Delar som planering, struktur och versionshantering har nu verkligen betytt en väldigt viktig roll för att arbeta med projektet på bästa möjliga sätt. Att se kombinationen av dessa delar i full skala.
+
+Målsättningar
+Målsättningar och förväntningar som du haft inför arbetet i projektet.    Mål är att projektet skall fungera och uppfylla de krav som kravspecifikationen kräver. Förväntas se djupare problem än de som hittills kommit i kursen. Vill kunna bryta ner problemen i mindre problem och utgå därifrån. 
+
+
+
+
+Analys av projektuppgiften
+Här beskrivs förståelse av uppgiften, hur uppgiften har avgränsats samt planläggning av lösningen. Vilket innefattar sådant som val av lämpliga variabler och uppdelning av uppgiften i lämpliga delar (”stepwise refinement”). Det som beskrivs här är en sammanfattning av hur förståelse, avgränsning och planläggningen vuxit fram under arbetets gång. Det skall inte beskriva de lösningar ni kommit fram till detta skall presenteras i genomförande delen.  I detta kapitel skall också den teori presenteras som behövs för att förstå uppgiften.  Det är viktigt att analysen är logiskt uppbyggd och att beskrivningar och exempel är lätta att följa.
+
+Förstudie
+Detta är en viktig del av hela projektet, att ha en förståelse om vad projektet handlar om. Förstudien gick ut på att diskutera med klasskamrater om och hur projektet i helhet skulle se ut. Struktur av funktioner etc. Det var också här idéer kom fram som man kunde ta till vara på och sedan använda.  Kunskap om Magiska Kvadrater och dess fungerande var här förstås ett obligatorisk krav för att lyckas med projektet. 
+
+Planering
+Efter bollande med idéer och de krav man satte upp fick planeringen börja. En tidsplan över projektet kom inte till hands, utan tidsplanen i sig var att uppgiften för krav (betyg) 3 skulle vara klar en vecka innan deadlinen 15 december. Veckan därefter är till för eventuella förbättringar i kodkvalité, justeringar och implementation av uppgiften för krav (betyg) 4-5. 
+
+Generellt upplägg av planeringen:
+Förstå Magiska Kvadrater
+Vilket språk koden skulle vara i? Vilket språk användaren skulle se? 
+Hur strukturen av programmet skulle se ut?
+Flödesschema över varje delmoment i programmet.
+Konvertera flödesschema till kod
+
+Design
+Valde att koden skulle ha ett engelskt utseende, variabeltypsnitt utav CamelCase. Använder VisualStudio som IDE. Har dock använt det mobila tillvägagångssättet med laptop till största delen av tiden, där jag använt Editor programmet Atom. Kompilerar med den inbygga Terminalen med ett plugin vid namn Clang. 
+Filstrukturen består av en source.c fil och ytterligare en diverse.c fil och dess diverse.h fil. Sedan ett antal lämpliga biblioteksfiler.   
+Genomförande
+Här beskrivs hur du arbetat med utvecklingen av applikationen. Hur ser lösningen ut för de aspekter som analyserats och beskrivs i kapitel 2 ut? Vilka svårigheter/problem har du stött på vid utvecklingsarbetet? Hur har dessa svårigheter hanterats? 
+En kronologisk beskrivning skall inte göras, dvs av typen först så gjorde vi så och sedan så och sedan så osv..  Under arbetets gång kan man dock föra en enkel logg där varje inlägg datum markeras, denna logg är en god hjälp att komma ihåg hur arbetet förlöpt och blir en hjälp att skriva rapporten. Loggen hjälper också till att göra den självvärdering som gruppen skall göra, (Självvärderingen beskrivs mer genom gående i ett dokument med projektinformation).
+
+Genomförande
+Hexkvadrat eller benämningen Magic Square (*MS, som kommer att användas i resten av rapporten, då MS används frekvent även i programmet) består av n antal rader och n antal kolumner. En korrekt MS ska innehålla samma summa av siffror på alla rader, kolumner och dess diagonaler samt att ingen siffra får förekomma mer än en gång. I detta program ska en 4x4 MS appliceras.
+Förstudien innehöll bland annat flödesschema till de fyra olika delmomenten i applikationen. 
+De sex olika delmomenten i programmet:
+
+
+Meny 
+Huvudmenyns egentliga syfte är att visa upp de olika menyvalen till användaren. Även här dyker programmets rubrik/titel upp.
+
+Skriv in eventuell Magic Square 4x4
+Detta är menyval 1. Denna funktion skall mata in ett värde i taget från användaren, och lägga in det värdet till en matris. Sedan anropa ett antal testfunktioner som testar om den inmatande eventuella MS är korrekt. Om den är korrekt, förfrågas användaren om en vill spara ned MS till en textfil. Oavsett om MS är korrekt eller ej skrivs den ut på konsolen. 
+
+Spara Magic Square till txt fil
+Detta var till som en egen menyval 2 men som förklaras mer utförligt nedan var det komplikationer som förhindrade detta ( det var svagheten inom kodkunskap ). Istället lades denna funktion in i både Menyval 1, och -4 funktionerna. Dess funktionalitet består av att efter inläst MS, oavsett om den är korrekt eller ej, ska kunna spara ned den i en textfil lokaliserat i samma mapp som programmet ligger i. 
+
+Hämta eventuell MS från txt fil
+Detta är menyval 3. Denna funktion skall läsa in en eventuell MS från en textfil, sedan testa med hjälp av testfunktionerna (förklaras i nästkommande rubrik) om det är en korrekt MS eller ej. Om den är korrekt skall MS skrivas ut i konsolen annars skrivs ett felmeddelande ut.
+
+“Fylla i spel”
+Detta är menyval 4. Ens uppgift är att hämta ned en korrekt MS från en textfil presentera MS till användaren fast med max åtta stycken sk *hål. Användarens uppgift är nu att försöka skriva in värden i hålen så att det blir en korrekt MS. Användarens eventuella MS testas med testfunktionerna, där användaren får reda på om sitt inmatande MS är korrekt eller ej. Dvs om man vunnit eller ej. 
+
+Felhantering
+Detta är inget menyval, men tar upp detta eftersom det är en väsentlig del av programmet. Tidigare  har det nämnts testfunktioner i de olika menyvalen, här beskrivs deras egentliga beteende. Testfunktionerna består av tre mindre olika funktioner som skall kolla så att raderna, kolumnerna och de två diagonalurna uppfyller summan av värdet 30, samt att ingen siffra förekommer mer än en gång. Om dessa tester går igenom godkänns Testfunktionen, annars inte. 
+
+Huvudmenyn är den tunna delen av programmet. Denna deltar så att det blir struktur i koden. Utifrån den och flödesscheman har arbetet successivt gått framåt. I denna delen kom inga direkta problem upp.
+
+Spara Magic Square in till textfil innehöll problematik som gjorde att; följa planen, inte var ett alternativ längre. Som tidigare beskrevs fick strukturen/arkitekturen i programmet ändras. Det hittades ingen lösning att ha “spara MS till textfil” som ett eget menyval. Detta på grund av att jag inte kunde komma på nåt sätt att ta hand om en MS i programmets minne som sedan skulle sparas ned i en textfil. Istället kom tanken på att införa dess funktionalitet i de andra menyvalen, ett och fyra. Eftersom där är de ända ställena som kräver dess funktion. Funktionen benämndes till saveMStxtFile() och förfrågas till användaren. Med detta sagt har problemet inte löst sig, men gått runt problemet istället. Detta är en *TODO som senare kan förbättras i vidautvecklingsfasen. 
+
+Spara Magic Square till text fil. Syftet är att läsa från fil och lägga in det i en två dimensionellt array. Här kom komplikationer som var besvärliga att inte få löst. Första problemet var att när det läses in från filen med sparad eventuell MS att det även läses in mellanrum som karaktärer.  Nedan visas kodsnutten som gjorde det besvärligt.
+
+
+Detta var en av de första versionerna av denna funktion, försökte med hjälp av isspace funktionen tag bort mellanrummen, men för  att solla bort mellanrummen måste matrisen innehålla 32 platser eftersom det är 32 tecken som läses in. 
+När anropning av testfunktioner tillkommer blir det fel, då testfunktionerna vill ha in en 4x4 matris i parameter, nu tas en 4x5 matris in vilket uppenbart inte fungerar.  
+
+
+
+
+
+Denna lösning var inte optimal. Fick tänka i andra tankar angående inmatningen från textfilen. Om läsningen bara läste varannan *character? skulle inte detta fungera, då mellanrummen bara ligger i varannan plats på textsträngen i filen? Försökte implementera detta utan några som helst framgångar, detta blev bara mer komplext än vad det egentligen behövt vara. 
+
+Fick studera detta problem ytterligare, och tillslut efter diskussion och läsande på olika forum kom slutsatsen att varför inte läsa in karaktärerna med fscanf? Detta löste alla problem då den bortser från sk whitespaces och lägger in till 2D fältet mha en nästlad loop. 
+
+“Fylla i spel” Problemet som uppstod var helheten hur denna struktur skulle se ut. Första tanke var att användaren skulle se en MS med hål i sig som han sedan skulle fylla då användaren bara skrev in i dem positioner hålen var på. Och om de inmatade värdena skulle vara lika som hålens egentliga värde hade skulle användaren vinna spelet. Problemet var att hur skulle inmatningen komma in i samma matris som den korrekta matrisen? Eller rättare sagt hur skulle inmatningarna kontrolleras? 
+Vidareutveckling av detta problem var att man kanske skulle skriva in en helt ny matris som sedan skulle kollas med hjälp utav testFunktionerna. Men detta kändes inte helt korrekt eftersom det då skulle finnas flera lösningar. 
+
+Kom på att man kunde använda sig utav två matriser. En matris som innehar de korrekta värdena för en MS och en som användaren skapade utifrån informationen som visas med den korrekta matrisen och dess hål. Sedan jämföra dessa matriser med varann och kolla om de stämmer överens. Detta gjordes med memcpy funktionen inuti <string.h> bibioteket. På detta sätt finns det bara en lösning. 
+
+Felhantering av inmatningen som en matris tar emot då samma siffra inte får förekomma mer än en gång blev till ett problem. Första versionen av denna lösning var att kolla om summan av de totala värdena i hela matrisen blev 120, då finns det inga dubletter eftersom för att komma upp till 120 krävdes det att varje siffra dök upp en gång. Det visades sig vara fel, då man kan mata in en matris som innehåller samma värde flera gånger fast ändå komma upp till summan 120. Även ifall chansen är liten så finns fortfarande risken där ute. Lösningen till detta finns i rubriken Resultat.
+
+
+
+
+
+
+Resultat
+Beskriv den färdiga lösningen. Beskriv den huvudsakliga uppbyggnaden av koden, och vad som behövs för att förstå koden. Det kan innefatta en beskrivning av olika komplexa datastrukturer och generella kodkonstruktioner (i form t.ex. av funktioner som återanvänds). Beskriv hur de i kapitel 2 analyserade aspekterna har kunnat genomföras. En verbal beskrivning kan göras med figurer och korta kodavsnitt för att förklara intressanta lösningar. Längre kodavsnitt måste förläggas till ett appendix. Figurer / tabeller måste förses med en numrering och förklarande text och måste refereras till i texten. Även kodavsnitt måste refereras till i texten. Läsaren måste förstå varför de finns med på det ställe de förekommer.
+Stäm också av hur det färdiga resultatet uppfyller uppsatta målsättningar. 
+
+— Dubblett av siffra
+— askUserSaveMS
+Finns många lösningar som skulle kunna redovisats här. Men väljer att visa och gå igenom en utav de mer väsentliga lösningarna som kom till genom arbetets gång. Ord som skrivs med kursiv stil är referenser till kodsnuttsbilden. 
+
+Första lösning som gjordes i “diverseLib.c” skapades på grund utav att denna kod upprepades gång på gång i programmet. Nu anropas denna funktion istället och upprepning av kod minskat drastiskt. Och ifall programmet skulle expanderas vid något tillfälle skulle denna funktionen ge större och större betydelse. Funktionen är inte så komplex men användbar. 
+
+Denna funktion användes varje gång när programmet frågar användaren om en vill spara MS till textfil eller liknande. 
+
+Bool datatypen finns inte som standard i C, därav fick man skapa en sådan typedef deklaration då TRUE definieras som en etta och FALSE som en nolla. 
+
+Funktionens parameter kräver en inmatning av typen sträng som också fått en egen typedef deklaration. getInteger() är en lånad funktion som finns i biblioteket myIOLib.c som senast är modifierad av Anders Carstenssen, där den läser en Integer från användaren. Kollar också att inmatningen av användaren är utav typen Integer, annars skrivs ett felmeddelande ut. 
+
+Varför jag väljer och kolla om getInteger == 1 är pga utan den lilla detaljen kan användaren skriva in vad som helst och villkoret godkänns. Funktionens uppgift är om användaren skriver in en etta eller inte.
+
+Tex
+ if(“Do you want to save this MS into an textfile, type 1”);
+     saveMStoTxtFile(matrix);	
+
+Att skriva så gör programmet mer generellt, eftersom strängen i funktionens parameter kan ifråga vara vad som helst. Vilket gör att man kan använda funktionen även i andra scenarion. 
+
+
+
+
+Andra lösningen handlar om felhantering av inmatningen som en matris tar emot. Då samma siffra inte får förekomma mer än en gång. Som beskrevs i rubriken, Genomförande, var logiken; summan == 120 inte optimal. Istället kom efter diskussioner med klasskamrater och lärare fram till denna lösning:
+
+Funktionen (som är 1 utav 3 testFunktioner) returnerar ett sant eller falskt värde, beroende på om det finns någon dubblett någonstans i matrisen. Här skapas först ett endimensionell fält som loopas sexton gånger. Syftet med detta är att nollställa fältet med nollor. Längre ner befinner sig en nästlad loop som loopar sig igenom positionerna i matrisen. Inuti nästlandet finns ett sentinelvärde och ett villkor där den kollar om fältets värde på position matrix är värt 0, är den det, sätter den värdet 1 på den positionen.
+
+Nästa gång villkoret upptäcker att värdet är 1 hoppar den till else satsen där den tilldelar variabeln result till FALSE och bryter ut ur loopen samt returnerar FALSE. Detta eftersom det är nolltolerans som gäller, dvs att ingen siffra får dyka upp mer än en gång. 
+
+Nyckeln här är kombinationen mellan det endimensionella fältet och matrisen, hur de kan samverka med varann och vilken effekt det bidrar med. 
+
+Om ärligheten kliver fram borde det finnas enklare sätt att kolla igenom en matris om det finns dubbletter med en mer godtycklig konstruktion. Målsättningen nås då funktionen gör det den skall göra och inget annat. Aspekter från analysen har uppfyllts gällande att det ska finnas tre testFunktioner vilket vardera testar sin aspekt av matrisen, här en utav de tre. 
+
+
+ 
+Diskussion
+Vilka lärdomar har gjorts genom projektarbetet? Vad kunde ha gjorts annorlunda? Reflektera över alternativ som utvärderats för olika lösningar.
+
+Läsa igenom kravspecifikationen ordentligt, därav missade jag att i “spelet” får innehålla flera lösningar. Detta påverkade att obehövlig tid kunde spenderats på annat område, då tid och energi lades ner på något som egentligen hade fungerat. Refererar här till problemen i “Fylla i spel”. 
+
+Viktig lärdom var också att, som kodare, att tänka mer och skriva mindre. Detta ser man i programmet konkret då samma kod upprepas fler gånger. Vilket är en bidragande faktor till att skriva mer generellt i framtiden. Referenser
+Här infogas en lista med referenser, dvs litteratur, tidskrifter, webb-sidor etc som använts vid arbetet. Listan struktureras enligt Harvard (APA) systemet (ett av manga referenshanteringssystem). Se bibliotekets redogörelse för referenshantering 
+http://hj.se/bibl/sok---skrivhjalp/skriva-litteraturreferenser.html
+Och då speciellt 
+http://hj.se/bibl/sok---skrivhjalp/skriva-litteraturreferenser/apa-harvard.html
+
+
+
+https://www.tutorialspoint.com/c_standard_library/c_function_memcpy.htmOrdförklaring
+En bilaga kan innehålla längre kodavsnitt, som av den anledningen inte är lämpliga att direkt inkludera i rapporttexten. Kod som skrivits ska vara försedd med kommentarer och vara välstrukturerad. Det kan också vara andra dokument som varit nyttiga i projektarbetet. Eventuellt utdrag från loggboken om en sådan förts under projektets gång.  Man skall någonstans i rapporttexten referera till bilagan, annars fyller den inte någon funktion.   
+Bilaga 1	Skriv rubrik för bilaga 1 här.
+Bilaga 2	Skriv rubrik för bilaga 2 här.
+…
+
+*MS = Magic Square = Hexkvadrat
+
+*Hål = Annan betydelse av att man inte ser siffran visuellt
+
+*TODO = Indikation på att något behöver göras/förbättras här
