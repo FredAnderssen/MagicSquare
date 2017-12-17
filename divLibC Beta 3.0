@@ -1,0 +1,373 @@
+#include "DivLib.h"
+#include "myIOLib.h"
+#include "simpio.h"
+#include <string.h>
+#include "random.h"
+
+
+void prntMenu(void)
+{
+  char choice = 0;
+  do {
+  printf("\n\nChoose an option:\n");
+  printf("1 - Write in an Matrix manually\n");
+  printf("2 - Get an  Matrix from an textfile\n");
+  printf("3 - Play FYLLA I SPEL \n");
+  printf("4 - Get all the unique subsets of Magic Squares\n");
+  printf("0 - Exit program\n\n");
+  choice = getInteger("Your choice: ");
+  Menu(choice);
+
+ } while (choice != 0);
+
+}
+
+void Menu(int choice)
+{
+  switch (choice) {
+    case 1:
+      getMatrix();
+      break;
+
+    case 2:
+      readFromtxtFile();
+      break;
+
+    case 3:
+      littleGame();
+      break;
+
+    case 4:
+      getAllSubsets();
+      break;
+
+    default:
+      break;
+  }
+}
+
+void getMatrix(void)
+{
+  int matrix[SIZE][SIZE];
+
+  printf("\nEnter 16's numbers for your matrix: ");
+
+  for(int row = 0; row < SIZE; row++)
+  {
+    for(int col = 0; col < SIZE; col++)
+      scanf("%x", &matrix[row][col]);
+  }
+
+  if(askUser("Save Magic Square into a textfile?\nType 1...\n"))
+    saveMStxtFile(matrix);
+
+  if(allTests(matrix))
+    prntMatrix(matrix, SIZE);
+  else
+    printf("\nThis was not a correct MagicSquare unfortunately");
+  getchar();
+
+}
+
+void prntMatrix(int matrix[][SIZE], int rowSize)
+{
+  for(int row = 0; row < rowSize; row++)
+  {
+    printf("\n");
+    if(row % 4 == 0)
+      printf("\n");
+    for(int col = 0; col < SIZE; col++)
+      printf("\t %x", matrix[row][col]);
+  }
+}
+
+bool diaTest(int matrix[][SIZE])
+{
+  int LRsum = 0;
+  int sumRL = 0;
+  bool result = FALSE;
+
+  for(int LRcol = 0, colRL = 3; LRcol < SIZE, colRL >= 0; LRcol++, colRL--)
+  {
+    LRsum += matrix[LRcol][LRcol];
+    sumRL += matrix[LRcol][colRL];
+  }
+
+  if ((LRsum == SUM) && (sumRL == SUM))
+    result = TRUE;
+
+  return result;
+}
+
+bool rowColTest(int matrix[][SIZE])
+{
+  int sumRow = 0;
+  int sumCol = 0;
+  int result = FALSE;
+
+  for(int row = 0;row < SIZE; row++)
+  {
+    sumRow = 0;
+    sumCol = 0;
+    for(int col = 0; col < SIZE; col++)
+    {
+      sumRow += matrix[row][col];
+      sumCol += matrix[col][row];
+
+      if((sumRow == SUM) && (sumCol == SUM))
+        result = TRUE;
+    }
+
+    if((sumRow != SUM) || (sumCol != SUM))
+    {
+      result = FALSE;
+      break;
+    }
+  }
+  //printf("%d %d", sumRow, sumCol); //test
+  //printf("\n %d", result);          //test
+  return result;
+}
+
+bool doublettTest(int matrix[][SIZE])
+{
+  int totalSumInMS = 0;
+  bool arr[16];
+  bool result = TRUE;
+
+  for(int i = 0; i < 16; i++)
+    arr[i] = 0;
+
+  for(int row = 0; row < SIZE; row++)
+  {
+    for(int col = 0; col < SIZE; col++)
+    {
+      if(arr[matrix[row][col]] == 0)
+        arr[matrix[row][col]] = 1;
+      else
+      {
+        result = FALSE;
+        break;
+      }
+    }
+  }
+  return result;
+}
+
+void saveMStxtFile(int matrix[][SIZE]) //TODO felhantering, om fil existerar elr inte
+{
+  FILE *inFile = fopen("SAVED_MagicSquare.txt", "a");
+
+  for(int row = 0; row < SIZE; row++)
+  {
+    for(int col = 0; col < SIZE; col++)
+      fprintf(inFile, "%x ", matrix[row][col]);
+  }
+  fprintf(inFile, "\n");
+  fclose(inFile);
+}
+
+void readFromtxtFile(void) //TODO förbättra filhanteringen?
+{
+  int array[SIZE][SIZE];
+
+  FILE *inFile = fopen("hexkvadrater.txt", "r");
+  if(inFile)
+  {
+    for (int arr = 0; arr < SIZE; arr++)
+    {
+      for (int idx = 0; idx < SIZE; idx++)
+      {
+        fscanf(inFile, "%x", &array[arr][idx]);
+      }
+    }
+
+    if(askUser("Do you want to see the Magic Sqaure?\nType 1.."))
+      prntMatrix(array, SIZE);
+    if(allTests(array))
+      printf("\n\nThis is a correct MagicSquare\n");
+    else
+      printf("\n\nThis is a non-correct MagicSquare\n");
+    fclose(inFile);
+  }
+
+  else
+  {
+    printf("The file does not exist");
+    getchar();
+  }
+}
+
+void littleGame(void) //TODO generalisera mer inuti
+{
+  int array[SIZE][SIZE];
+  int duplicateArr[SIZE][SIZE];
+  int roof;
+  int k, m;
+
+
+  FILE *inFile = fopen("hexkvadrater.txt", "r");
+
+  for (int arr = 0; arr < SIZE; arr++)
+  {
+    for (int idx = 0; idx < SIZE; idx++)
+    {
+      fscanf(inFile, "%x", &array[arr][idx]);
+    }
+  }
+
+  roof = RandomInteger(0, 7);
+  memcpy(duplicateArr, array, sizeof(array));
+
+  for(int i = 0; i <= roof; i++)
+  {
+    k = RandomInteger(0,3);
+    m = RandomInteger(0,3);
+
+    duplicateArr[k][m] =  16;
+  }
+
+  //Detta block gör 'space' på "hålen"
+  for(int row = 0; row < SIZE; row++)
+  {
+    printf("\n");
+    for(int col = 0; col < SIZE; col++)
+    {
+      if(duplicateArr[row][col] != 16)
+        printf("%x", duplicateArr[row][col]);
+      printf("\t");
+    }
+  }
+
+  //TODO gör getMatrix mer generell och få in den func här
+  printf("\n\nEnter 16's numbers for your matrix: ");
+  for(int row = 0; row < SIZE; row++)
+  {
+    for(int col = 0; col < SIZE; col++)
+      scanf("%x", &duplicateArr[row][col]);
+  }
+
+  if(allTests(duplicateArr))
+    printf(" \nCORRECT Magic Square");
+  else
+    printf(" \nINCORRECT Magic Square");
+  getchar();
+  //*******************************************************
+
+}
+
+bool allTests(int matrix[][SIZE])
+{
+  if(diaTest(matrix) && rowColTest(matrix) && doublettTest(matrix))
+    return TRUE;
+  return FALSE;
+}
+
+bool askUser(char* str)
+{
+  int result = FALSE;  //TODO måste ha ==1 där annars går alla siffror bra..?
+  if((getInteger(str)) == 1)
+    result = TRUE;
+  return result;
+}
+
+void printTxtFile(char* filename)
+{
+  FILE *f;
+      char c;
+      f=fopen(filename,"rt");
+
+      while((c=fgetc(f))!=EOF){
+          printf("%c",c);
+      }
+      fclose(f);
+}
+
+void getAllSubsets(void)
+{
+  int arr1[ELEMENTS] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
+  int matrix[86][SIZE]; //där delmängderna ska placeras in
+  int counter = 0;
+
+  for(int i = 0; i < ELEMENTS; i++) {
+    for (int j = 0; j < i; j++) {
+      for(int k = 0; k < j ; k++) {
+        for(int l = 0; l < k; l++) {
+          if(arr1[i] + arr1[j] + arr1[k] + arr1[l] == SUM) {
+                          //första etapp: f        e        1        0
+            //printf("%x %x %x %x \n", arr1[i], arr1[j], arr1[k], arr1[l]);
+            matrix[counter][0] = arr1[i];
+            matrix[counter][1] = arr1[j];
+            matrix[counter][2] = arr1[k];
+            matrix[counter][3] = arr1[l];
+
+            counter += 1;
+          }
+        }
+      }
+    }
+  }
+
+  prntMatrix(matrix, counter);
+  printf("\n");
+
+  getAllMatrixes(matrix);
+  printf("\n\nof the total %d subsets.\n", counter);
+
+}
+
+int validateSubset(int matrix[][SIZE], int i, int j, int k, int l) {
+
+  int isChecked[ELEMENTS];
+  int sum = 0;
+  int arrOfEle[SIZE] = {i, j, k, l};
+
+  for(int q = 0; q < ELEMENTS; q++)
+    isChecked[q] = 0;
+
+  for(int ele = 0; ele < SIZE; ele++) {
+    for(int b = 0; b < SIZE; b++) {
+      isChecked[matrix[arrOfEle[ele]][b]] = 1;
+    }
+  }
+
+  for(int w = 0; w < ELEMENTS; w++)
+    sum += isChecked[w];
+
+  if(sum == ELEMENTS) {
+    sum = 0;
+    return 1;
+  }
+  else {
+    sum = 0;
+    return 0;
+  }
+}
+
+void getAllMatrixes(int matrix[][SIZE]) {
+  int countMatrixes = 0;
+
+  for(int i = 0; i < 86; i++) {
+    for (int j = 0; j < i; j++) {
+      for(int k = 0; k < j ; k++) {
+        for(int l = 0; l < k; l++) {
+
+          if(validateSubset(matrix, i, j, k, l)) {
+            int arrOfELe[SIZE] = {i, j, k, l};
+
+            for(int ele = 0; ele < SIZE; ele++) {
+              for(int x = 0; x < SIZE; x++)
+                printf("%x", matrix[arrOfELe[ele]][x]);
+              printf("\n");
+            }
+
+            printf("\n\n");
+            countMatrixes++;
+          }
+        }
+      }
+    }
+  }
+
+printf("\n\nIt is: %d matrixes", countMatrixes);
+}
