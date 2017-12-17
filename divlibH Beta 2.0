@@ -1,0 +1,101 @@
+#pragma once
+/*
+* File: DivLib.h
+* Version: 1.0
+* Last modified on Sat Nov 18 2017 by AnFr16lp
+* -----------------------------------------------------
+* This interface provides several functions for user input
+*
+*/
+
+#ifndef _DivLib_h
+#define _DivLib_h
+
+#include <stdio.h>
+#include "genlib.h"
+#include <ctype.h>
+
+#define SIZE 4
+#define SUM 30
+/* Function prototypes */
+
+
+
+/************************************************************************************
+* Prints the menu
+************************************************************************************/
+void prntMenu(void);
+
+/************************************************************************************
+* Takes care of the choice user makes and executes that function
+************************************************************************************/
+void Menu(int);
+
+/************************************************************************************
+* Gets a matrix from the user, and checks if its a correct MS
+************************************************************************************/
+void getMatrix(void);
+
+/************************************************************************************
+* Prints the given matrix
+************************************************************************************/
+void prntMatrix(int [][SIZE], int);
+
+/************************************************************************************
+* This function tests if both the diagonals is correct, meaning to be 30 in value.
+* LR stands for LeftRight, and RL for RightLeft diagonal.
+************************************************************************************/
+bool diaTest(int[][SIZE]);
+
+/************************************************************************************
+* Tests if all columns and rows is equal to thirty
+************************************************************************************/
+bool rowColTest(int[][SIZE]);
+
+/************************************************************************************
+* Tests if there is any number that comes more than one time
+************************************************************************************/
+bool doublettTest(int[][SIZE]);
+
+/************************************************************************************
+* This function creates a new file and prints the 2:nd dimension array into that
+* Everytime it executes, it is adding characters to the file.
+************************************************************************************/
+void saveMStxtFile(int[][SIZE]);
+
+/************************************************************************************
+* Reads the first line in the txtfile. Tests if its a correct MS
+************************************************************************************/
+void readFromtxtFile(void);
+
+/************************************************************************************
+* Too big function. Makes user to play a game
+************************************************************************************/
+void littleGame(void);
+
+/************************************************************************************
+* This function assembles all the three test function into one
+************************************************************************************/
+bool allTests(int [][SIZE]);
+
+/************************************************************************************
+* This function asks the User to save the MS into a txtfile.
+* If willing, the func returns a True statement.
+* If not, it will return False.
+************************************************************************************/
+bool askUser(char* string);
+
+/************************************************************************************
+* This function takes a string and try finding the file with that name and
+* prints out the txtfile.
+************************************************************************************/
+void printTxtFile(char* filename);
+
+/************************************************************************************
+* This function shows the user all the subsets for the given quantity
+* of elements and places them into an matrix.
+* One subset consists of 4 elements.
+************************************************************************************/
+void subsetMatrix(void);
+
+#endif
